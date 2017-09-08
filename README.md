@@ -30,6 +30,15 @@ git push origin master
 
 For further development, check out the [beat developer guide](https://www.elastic.co/guide/en/beats/libbeat/current/new-beat.html).
 
+### Dependencies
+
+The project need to install the following dependencies to run.
+
+```
+go get golang.org/x/sys/unix
+go get github.com/shirou/gopsutil
+```
+
 ### Build
 
 To build the binary for Memstatsbeat run the command below. This will generate a binary

@@ -128,12 +128,42 @@ None
 
 
 [float]
-=== counter
+=== cpuModel
 
-type: long
+type: text
 
-required: True
+[float]
+=== cpuCacheL2GB
 
-PLEASE UPDATE DOCUMENTATION
+type: float
 
+[float]
+=== memAvailableGB
+
+type: float
+
+[float]
+=== memUsedGB
+
+type: float
+
+[float]
+=== memTotalGB
+
+type: float
+
+[float]
+=== diskAvailableGB
+
+type: float
+
+[float]
+=== diskUsedGB
+
+type: float
+
+[float]
+=== diskTotalGB
+
+type: float
 

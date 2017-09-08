@@ -9,6 +9,10 @@ import (
 	"github.com/elastic/beats/libbeat/logp"
 	"github.com/elastic/beats/libbeat/publisher"
 
+	"github.com/shirou/gopsutil/mem"
+	"github.com/shirou/gopsutil/cpu"
+	"github.com/shirou/gopsutil/disk"
+
 	"github.com/aalmazanarbs/memstatsbeat/config"
 )
 
@@ -22,7 +26,7 @@ type Memstatsbeat struct {
 func New(b *beat.Beat, cfg *common.Config) (beat.Beater, error) {
 	config := config.DefaultConfig
 	if err := cfg.Unpack(&config); err != nil {
-		return nil, fmt.Errorf("Error reading config file: %v", err)
+		return nil, fmt.Errorf("error reading config file: %v", err)
 	}
 
 	bt := &Memstatsbeat{
@@ -32,27 +36,44 @@ func New(b *beat.Beat, cfg *common.Config) (beat.Beater, error) {
 	return bt, nil
 }
 
-func (bt *Memstatsbeat) Run(b *beat.Beat) error {
+func (bt *Memstatsbeat) Run (b *beat.Beat) error {
 	logp.Info("memstatsbeat is running! Hit CTRL-C to stop it.")
 
 	bt.client = b.Publisher.Connect()
 	ticker := time.NewTicker(bt.config.Period)
-	counter := 1
+
+	logp.Info(bt.config.VolumePath)
+
 	for {
-		select {
-		case <-bt.done:
-			return nil
-		case <-ticker.C:
+
+		m, errorV := mem.VirtualMemory()
+		c, errorC := cpu.Info()
+		d, errorD := disk.Usage(bt.config.VolumePath)
+
+		if errorV != nil || errorC != nil || errorD != nil || len(c) != 1 {
+			return fmt.Errorf("error getting stats: %v %v %v", errorV, errorC, errorD)
 		}
 
 		event := common.MapStr{
-			"@timestamp": common.Time(time.Now()),
-			"type":       b.Name,
-			"counter":    counter,
+			"type":            b.Name,
+			"@timestamp":      common.Time(time.Now()),
+			"cpuModel":        c[0].ModelName,
+			"cpuCacheL2GB":    prettyKilobytesNumber(c[0].CacheSize),
+			"memAvailableGB":  prettyBytesNumber(m.Available),
+			"memUsedGB":       prettyBytesNumber(m.Used),
+			"memTotalGB":      prettyBytesNumber(m.Total),
+			"diskAvailableGB": prettyBytesNumber(d.Free),
+			"diskUsedGB":      prettyBytesNumber(d.Used),
+			"diskTotalGB":     prettyBytesNumber(d.Total),
 		}
+
 		bt.client.PublishEvent(event)
-		logp.Info("Event sent")
-		counter++
+
+		select {
+			case <-bt.done:
+				return nil
+			case <-ticker.C:
+		}
 	}
 }
 

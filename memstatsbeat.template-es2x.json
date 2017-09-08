@@ -45,8 +45,33 @@
             }
           }
         },
-        "counter": {
-          "type": "long"
+        "cpuCacheL2GB": {
+          "type": "float"
+        },
+        "cpuModel": {
+          "index": "analyzed",
+          "norms": {
+            "enabled": false
+          },
+          "type": "string"
+        },
+        "diskAvailableGB": {
+          "type": "float"
+        },
+        "diskTotalGB": {
+          "type": "float"
+        },
+        "diskUsedGB": {
+          "type": "float"
+        },
+        "memAvailableGB": {
+          "type": "float"
+        },
+        "memTotalGB": {
+          "type": "float"
+        },
+        "memUsedGB": {
+          "type": "float"
         },
         "meta": {
           "properties": {

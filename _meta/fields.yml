@@ -2,8 +2,19 @@
   title: memstatsbeat
   description:
   fields:
-    - name: counter
-      type: long
-      required: true
-      description: >
-        PLEASE UPDATE DOCUMENTATION
+    - name: cpuModel
+      type: text
+    - name: cpuCacheL2GB
+      type: float
+    - name: memAvailableGB
+      type: float
+    - name: memUsedGB
+      type: float
+    - name: memTotalGB
+      type: float
+    - name: diskAvailableGB
+      type: float
+    - name: diskUsedGB
+      type: float
+    - name: diskTotalGB
+      type: float
