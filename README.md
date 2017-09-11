@@ -9,26 +9,7 @@ Ensure that this folder is at the following location:
 
 ### Requirements
 
-* [Golang](https://golang.org/dl/) 1.7
-
-### Init Project
-To get running with Memstatsbeat and also install the
-dependencies, run the following command:
-
-```
-make setup
-```
-
-It will create a clean git history for each major step. Note that you can always rewrite the history if you wish before pushing your changes.
-
-To push Memstatsbeat in the git repository, run the following commands:
-
-```
-git remote set-url origin https://github.com/aalmazanarbs/memstatsbeat
-git push origin master
-```
-
-For further development, check out the [beat developer guide](https://www.elastic.co/guide/en/beats/libbeat/current/new-beat.html).
+* [Golang](https://golang.org/dl/) 1.8
 
 ### Dependencies
 
@@ -38,6 +19,18 @@ The project need to install the following dependencies to run.
 go get golang.org/x/sys/unix
 go get github.com/shirou/gopsutil
 ```
+
+### Init Project
+To get running with Memstatsbeat run the following command:
+
+```
+make setup
+```
+
+It will create a clean git history for each major step. Note that you can always rewrite the history if you wish before pushing your changes.
+
+For further development, check out the [beat developer guide](https://www.elastic.co/guide/en/beats/libbeat/current/new-beat.html).
+
 
 ### Build
 

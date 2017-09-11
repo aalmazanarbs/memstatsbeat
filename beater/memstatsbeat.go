@@ -24,14 +24,14 @@ type Memstatsbeat struct {
 
 // Creates beater
 func New(b *beat.Beat, cfg *common.Config) (beat.Beater, error) {
-	config := config.DefaultConfig
-	if err := cfg.Unpack(&config); err != nil {
+	beat_config := config.DefaultConfig
+	if err := cfg.Unpack(&beat_config); err != nil {
 		return nil, fmt.Errorf("error reading config file: %v", err)
 	}
 
-	bt := &Memstatsbeat{
+	bt := &Memstatsbeat {
 		done:   make(chan struct{}),
-		config: config,
+		config: beat_config,
 	}
 	return bt, nil
 }
@@ -41,8 +41,6 @@ func (bt *Memstatsbeat) Run (b *beat.Beat) error {
 
 	bt.client = b.Publisher.Connect()
 	ticker := time.NewTicker(bt.config.Period)
-
-	logp.Info(bt.config.VolumePath)
 
 	for {
 
@@ -54,7 +52,7 @@ func (bt *Memstatsbeat) Run (b *beat.Beat) error {
 			return fmt.Errorf("error getting stats: %v %v %v", errorV, errorC, errorD)
 		}
 
-		event := common.MapStr{
+		event := common.MapStr {
 			"type":            b.Name,
 			"@timestamp":      common.Time(time.Now()),
 			"cpuModel":        c[0].ModelName,
